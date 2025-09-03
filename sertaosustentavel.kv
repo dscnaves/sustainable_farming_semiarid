@@ -1,0 +1,314 @@
+#: import get_color_from_hex kivy.utils.get_color_from_hex
+#: import TwoLineAvatarIconListItem kivymd.uix.list.TwoLineAvatarIconListItem
+#: import ListItemContainer __main__.ListItemContainer
+#: import IconLeftWidget kivymd.uix.list.IconLeftWidget
+#: import OneLineIconListItem kivymd.uix.list.OneLineIconListItem
+#: import MDCard kivymd.uix.card.MDCard
+
+ScreenManager:
+    id: screen_manager
+    OnboardingScreen:
+        name: 'onboarding'
+    DashboardScreen:
+        name: 'dashboard'
+    LocationScreen:
+        name: 'location'
+    WeatherScreen:
+        name: 'weather'
+    WaterBalanceScreen:
+        name: 'water_balance'
+    LearnMoreScreen:
+        name: 'learn_more'
+    CommunityScreen:
+        name: 'community'
+
+<OnboardingScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: "20dp"
+        spacing: "20dp"
+        md_bg_color: app.theme_cls.primary_light
+
+        MDBoxLayout:
+            adaptive_height: True
+            padding: "50dp"
+            MDLabel:
+                text: "SertãoSustentável"
+                font_style: "H4"
+                halign: "center"
+                color: app.theme_cls.primary_dark
+
+        MDLabel:
+            text: "Seu assistente do campo, trazendo informação e tecnologia para a sua plantação."
+            halign: "center"
+            font_style: "Body1"
+
+        MDRaisedButton:
+            text: "Vamos Começar"
+            pos_hint: {"center_x": 0.5}
+            on_release: app.root.current = 'location'
+
+<LocationScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: "20dp"
+        spacing: "40dp"
+
+        MDLabel:
+            text: "Onde fica sua plantação?"
+            font_style: "H5"
+            halign: "center"
+            adaptive_height: True
+
+        MDLabel:
+            text: "Precisamos da sua localização para buscar os dados de clima e solo da sua região."
+            halign: "center"
+            adaptive_height: True
+
+        MDRaisedButton:
+            text: "Usar minha Localização Atual (GPS)"
+            icon: "crosshairs-gps"
+            pos_hint: {"center_x": 0.5}
+            on_release: app.request_android_permissions()
+
+        MDTextField:
+            hint_text: "Ou digite o nome da sua cidade"
+            icon_right: "magnify"
+            mode: "rectangle"
+
+<DashboardScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            padding: "10dp"
+            spacing: "10dp"
+            size_hint_y: 1
+
+            # Cabeçalho
+            MDBoxLayout:
+                orientation: 'horizontal'
+                adaptive_height: True
+                padding: "10dp"
+
+                MDLabel:
+                    id: location_label
+                    text: "Definir Localização"
+                    font_style: "H6"
+                    bold: True
+                MDIconButton:
+                    icon: 'cog'
+                    on_release: app.root.current = 'location'
+
+            # Card de Alerta Crítico (exemplo)
+            MDCard:
+                md_bg_color: get_color_from_hex("#FF4444")
+                padding: "10dp"
+                MDLabel:
+                    text: "[b]ALERTA:[/b] Risco de seca severa nos próximos 10 dias."
+                    halign: "center"
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+                    markup: True
+
+            # Card Principal do Solo
+            MDCard:
+                orientation: 'vertical'
+                padding: "15dp"
+                size_hint_y: 0.4
+                md_bg_color: get_color_from_hex("#E8F5E9")
+
+                MDLabel:
+                    text: "Condição do Solo Hoje"
+                    font_style: "H6"
+                    halign: 'center'
+                    adaptive_height: True
+                
+                MDIconButton:
+                    icon: "volume-high"
+                    pos_hint: {"center_x": 0.5}
+                    on_release: app.play_audio("Atenção, solo começando a secar. Umidade em 45%.")
+
+                MDLabel:
+                    text: "[color=FFC107]ATENÇÃO[/color]"
+                    font_style: "H5"
+                    halign: "center"
+                    markup: True
+
+                MDLabel:
+                    text: "Umidade: 45%"
+                    halign: "center"
+                MDLabel:
+                    text: "Solo começando a secar"
+                    halign: "center"
+
+            # Grid de Acesso Rápido
+            GridLayout:
+                cols: 2
+                spacing: '10dp'
+
+                MDRaisedButton:
+                    text: "Previsão\\ndo Tempo"
+                    icon: "weather-cloudy"
+                    size_hint_y: None
+                    height: "100dp"
+                    on_release: app.root.current = 'weather'
+
+                MDRaisedButton:
+                    text: "Balanço\\nHídrico"
+                    icon: "water-percent"
+                    size_hint_y: None
+                    height: "100dp"
+                    on_release: app.root.current = 'water_balance'
+
+                MDRaisedButton:
+                    text: "Aprenda\\nMais"
+                    icon: "school"
+                    size_hint_y: None
+                    height: "100dp"
+                    on_release: app.root.current = 'learn_more'
+
+                MDRaisedButton:
+                    text: "Mural da\\nComunidade"
+                    icon: "account-group"
+                    size_hint_y: None
+                    height: "100dp"
+                    on_release: app.root.current = 'community'
+
+        MDBottomNavigation:
+            panel_color: self.theme_cls.primary_color
+            MDBottomNavigationItem:
+                name: 'dashboard_bottom'
+                text: 'Início'
+                icon: 'home'
+                on_tab_release: app.root.current = 'dashboard'
+
+            MDBottomNavigationItem:
+                name: 'learn_more_bottom'
+                text: 'Aprenda Mais'
+                icon: 'school'
+                on_tab_release: app.root.current = 'learn_more'
+
+            MDBottomNavigationItem:
+                name: 'community_bottom'
+                text: 'Comunidade'
+                icon: 'account-group'
+                on_tab_release: app.root.current = 'community'
+
+<WeatherScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Previsão do Tempo"
+            left_action_items: [["arrow-left", lambda x: setattr(app.root, 'current', 'dashboard')]]
+        
+        ScrollView:
+            MDList:
+                TwoLineAvatarIconListItem:
+                    text: "Hoje"
+                    secondary_text: "Max: 34°C | Min: 22°C | Chuva: 0%"
+                    IconLeftWidget:
+                        icon: "weather-sunny"
+                TwoLineAvatarIconListItem:
+                    text: "Amanhã"
+                    secondary_text: "Max: 33°C | Min: 23°C | Chuva: 10%"
+                    IconLeftWidget:
+                        icon: "weather-partly-cloudy"
+                TwoLineAvatarIconListItem:
+                    text: "Sábado"
+                    secondary_text: "Max: 30°C | Min: 21°C | Chuva: 80%"
+                    IconLeftWidget:
+                        icon: "weather-pouring"
+                TwoLineAvatarIconListItem:
+                    text: "Domingo"
+                    secondary_text: "Max: 31°C | Min: 22°C | Chuva: 40%"
+                    IconLeftWidget:
+                        icon: "weather-rainy"
+
+<WaterBalanceScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Balanço Hídrico do Solo"
+            left_action_items: [["arrow-left", lambda x: setattr(app.root, 'current', 'dashboard')]]
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: "15dp"
+                spacing: "15dp"
+                size_hint_y: None
+                height: self.minimum_height
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "15dp"
+                    MDLabel:
+                        text: "Diagnóstico: [color=FF0000]DEFICIÊNCIA HÍDRICA[/color]"
+                        markup: True
+                        font_style: "H6"
+                        halign: "center"
+                    MDIconButton:
+                        icon: "volume-high"
+                        pos_hint: {"center_x": 0.5}
+                        on_release: app.play_audio("Diagnóstico: Deficiência Hídrica. Choveu menos do que a plantação e o calor consumiram. A água no solo está diminuindo.")
+                    MDLabel:
+                        text: "Choveu menos do que a plantação e o calor consumiram. A água no solo está diminuindo."
+                        halign: "center"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "15dp"
+                    MDLabel:
+                        text: "Recomendações"
+                        font_style: "H6"
+                        halign: "center"
+                    MDList:
+                        OneLineIconListItem:
+                            text: "Se tiver irrigação, aplique uma lâmina de 5mm."
+                            IconLeftWidget:
+                                icon: 'water'
+                        OneLineIconListItem:
+                            text: "Cubra o solo com palha para guardar a umidade."
+                            IconLeftWidget:
+                                icon: 'leaf'
+                        OneLineIconListItem:
+                            text: "Fique atento aos sinais de sede na sua plantação."
+                            IconLeftWidget:
+                                icon: 'eye'
+
+<LearnMoreScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Aprenda Mais"
+            left_action_items: [["arrow-left", lambda x: setattr(app.root, 'current', 'dashboard')]]
+
+        ScrollView:
+            MDList:
+                id: learn_list
+
+<ListItemContainer>:
+    # Adicionando uma propriedade real para evitar o erro de 'pass'
+    adaptive_height: True
+
+<TwoLineAvatarIconListItem>:
+    # Adiciona a ação de clique aqui
+    on_release: app.open_article(self)
+
+<CommunityScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Mural da Comunidade"
+            left_action_items: [["arrow-left", lambda x: setattr(app.root, 'current', 'dashboard')]]
+        
+        ScrollView:
+            MDList:
+                id: community_feed
+
+        MDFloatingActionButton:
+            icon: "plus"
+            pos_hint: {"center_x": 0.5, "center_y": 0.1}
+            on_release: app.play_audio("Fazer uma nova pergunta")
