@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Sertão Sustentável
 
 **Sertão Sustentável** é um aplicativo educacional e climático voltado para produtores do semiárido brasileiro. Ele oferece informações meteorológicas, hídricas e técnicas sustentáveis de cultivo, com foco em acessibilidade e uso offline.
@@ -102,3 +103,7 @@ Projeto/
 └── simulador_irrigacao.py
 
 ```
+=======
+# sustainable_farming_semiarid
+This project is a volunteer initiative that supports small farmers in Brazil’s semi-arid region by providing an accessible mobile application for agricultural planning. The system integrates public climate and soil data (INMET, CPTEC/INPE, NASA) and applies algorithms for soil moisture estimation, water storage capacity and balance calculations.
+>>>>>>> c209cfc1fa1c574a26969ce5ae23278a535642e8
